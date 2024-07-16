@@ -1,0 +1,28 @@
+version: "4.5"
+
+services:
+  app:
+    build:
+      context: .
+    env_file:
+      - .env
+    environment:
+      WAIT_HOSTS: pg:5432
+      DB_HOST: pg
+
+  pg:
+    image: postgres:16-alpine3.20
+    restart: always
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_PASSWORD=$DB_PASS
+      - POSTGRES_DB=$DB_NAME
+    ports:
+      - "5432:5432"
+
+volumes:
+  pg-data:
